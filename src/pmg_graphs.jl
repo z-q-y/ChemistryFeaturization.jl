@@ -206,7 +206,7 @@ function build_graphs_batch(input_folder::String, output_folder::String, featuri
         try 
             ag = build_graph(file; use_voronoi=use_voronoi, radius=radius, max_num_nbr=max_num_nbr, dist_decay_func=dist_decay_func, normalize=normalize)
         catch
-            continue
+            return id
         end
         if featurize
             add_features!(ag, atom_featurevecs, featurization)
@@ -219,6 +219,6 @@ end
 # alternate call signature where featurization is generated
 function build_graphs_batch(cif_folder::String, output_folder::String, feature_names::Vector{Symbol}; nbins::Vector{<:Integer}=default_nbins*ones(Int64, size(feature_names,1)), logspaced=false)
     atom_featurevecs, featurization = make_feature_vectors(build_atom_feats(feature_names; nbins=nbins, logspaced=logspaced))
-    build_graphs_batch(cif_folder, output_folder; featurization=featurization, atom_featurevecs = atom_featurevecs)
+    build_graphs_batch(cif_folder, output_folder, featurization; atom_featurevecs = atom_featurevecs)
 end
 
